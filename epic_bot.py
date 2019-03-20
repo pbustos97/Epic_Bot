@@ -25,21 +25,22 @@ async def on_message(message):
         await bot.send_message(message.channel, botDict.get(msg[0]).format(message))
 
     elif message.content.startswith(botAddCmd) and msg[1] not in botDict:
-        # parse command and bot response
-        newCmd = msg[1]
-        botResponse = ''
-        for i in range(2,len(msg)):
-            botResponse += (' ' + msg[i])
-        botResponse = botResponse[1:]
-        print(botResponse)
+        if (msg[1] not in botDict):
+            # parse command and bot response
+            newCmd = msg[1]
+            botResponse = ''
+            for i in range(2,len(msg)):
+                botResponse += (' ' + msg[i])
+            botResponse = botResponse[1:]
+            print(botResponse)
 
-        # save newCmd and botResponse to file and temp dictionary
-        botDict[newCmd] = botResponse
-        np.save('botDict.npy', botDict)
+            # save newCmd and botResponse to file and temp dictionary
+            botDict[newCmd] = botResponse
+            np.save('botDict.npy', botDict)
 
-    elif message.content.startswith(botAddCmd) and msg[1] in botDict:
-        botMsg = 'Bot already has command ```' + msg[1] + '```'
-        await bot.send_message(message.channel, botMsg.format(message))
+        else:
+            botMsg = 'Bot already has command ```' + msg[1] + '```'
+            await bot.send_message(message.channel, botMsg.format(message))
 
     elif message.content.startswith(botRmCmd):
         if msg[1] in botDict:
@@ -57,4 +58,4 @@ async def on_message(message):
 async def on_ready():
     print('Logged in as:\n{0} (ID: {0.id})'.format(bot.user))
 
-bot.run(lel_bot_token)
+bot.run(epic_bot_token)
