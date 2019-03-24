@@ -1,0 +1,2 @@
+botAddCmd = './add'
+botRmCmd = './remove'

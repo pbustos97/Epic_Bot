@@ -100,4 +100,4 @@ ENV/
 
 # Ignore these files
 epic_bot_id.py
-botDict.npy
+*.npy

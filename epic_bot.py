@@ -3,29 +3,36 @@ import sys
 import string
 import asyncio
 import discord
-import random
-import time
 import numpy as np
 from discord.ext import commands
 from epic_bot_id import epic_bot_token
-from epic_bot_id import botDict
-from epic_bot_id import botAddCmd
-from epic_bot_id import botRmCmd
-from epic_bot_id import botSaveCmd
+from epic_bot_default_cmds import botAddCmd
+from epic_bot_default_cmds import botRmCmd
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$'), description='Meme bot')
 
-# Put into on_message function for unique commands. Change string to server id string object
-# Put into try except
-botDict = np.load('botDict.npy').item()
+# Needed in case server does not have a .npy file yet
+botDictBase = np.load('botDict.npy').item()
 
-# Add specific server functionality so each discord server has unique commands
-# Set new variable to server id. Convert to string object. Convert all save strings to server id string object
 @bot.event
 async def on_message(message):
+
+    serverId = str(message.server.id) + '.npy'
+
+    # does not work if np.load(serverId).item() doesn't exist
+    try:
+        botDict = np.load(serverId).item()
+    except:
+        print('Server ' + serverId + ' does not have commands dictionary file yet')
+        print('Creating new file for ' + serverId)
+        np.save(serverId, botDictBase)
+        botDict = np.load(serverId).item()
+
+
     msg = message.content.split()
     msg[0] = msg[0][2:] #removes the first 2 characters './'
 
+    # does not work if np.load(serverId).item() doesn't exist
     if msg[0] in botDict:
         await bot.send_message(message.channel, botDict.get(msg[0]).format(message))
 
@@ -41,6 +48,7 @@ async def on_message(message):
 
             # save newCmd and botResponse to file and temp dictionary
             botDict[newCmd] = botResponse
+            np.save(serverId, botDict)
 
         else:
             botMsg = 'Bot already has command ```' + msg[1] + '```'
@@ -49,17 +57,15 @@ async def on_message(message):
     elif message.content.startswith(botRmCmd):
         if msg[1] in botDict:
             del botDict[msg[1]]
+            np.save(serverId, botDict)
         else:
             botMsg = 'Command not in dictionary ```' + msg[1] + '```'
             await bot.send_message(message.channel,botMsg.format(message))
 
-    elif message.content.startswith(botSaveCmd):
-        np.save('botDict.npy', botDict)
-
-    elif message.author != bot.user:
+    elif message.author != bot.user and message.content.startswith('./'):
         botMsg = 'Command does not exist'
         await bot.send_message(message.channel, botMsg.format(message))
-
+        
 @bot.event
 async def on_ready():
     print('Logged in as:\n{0} (ID: {0.id})'.format(bot.user))
