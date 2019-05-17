@@ -1,2 +1,5 @@
 botAddCmd = './add'
 botRmCmd = './remove'
+botAddRole = './addrole'
+botBanCmd = './ban'
+botKickCmd = './kick'
