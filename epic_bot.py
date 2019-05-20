@@ -29,8 +29,10 @@ async def on_message(message):
         np.save(serverId, botDictBase)
         botDict = np.load(serverId).item()
 
+    # Calls changed botPrefix
     global botPrefix
     msg = message.content.split()
+    msgPrefix = msg[0][:len(botPrefix)]
     msg[0] = msg[0][len(botPrefix):] #removes the first 2 characters './'
 
     # Does not work if np.load(serverId).item() doesn't exist
@@ -186,7 +188,8 @@ async def on_message(message):
                 else:
                     await bot.kick(target)
 
-    elif message.author != bot.user and message.content.startswith('./'):
+# Else Command Fails
+    elif message.author != bot.user and msgPrefix == botPrefix:
         botMsg = 'Command does not exist or {0.author.mention} does not have permission'
         await bot.send_message(message.channel, botMsg.format(message))
         
@@ -196,5 +199,6 @@ async def on_ready():
     print('What is the bot prefix?')
     global botPrefix
     botPrefix = input()
+    print(botPrefix + ' is this instance\'s prefix')
 
 bot.run(epic_bot_token)
