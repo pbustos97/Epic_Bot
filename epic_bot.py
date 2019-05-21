@@ -11,9 +11,6 @@ from epic_bot_default_cmds import *
 # changed description
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$'), description='User Command Bot')
 
-# Needed in case server does not have a .npy file yet
-botDictBase = np.load('botDict.npy').item()
-
 @bot.event
 async def on_message(message):
 
@@ -26,6 +23,7 @@ async def on_message(message):
     except:
         print('Server ' + serverId + ' does not have commands dictionary file yet')
         print('Creating new file for ' + serverId)
+        botDictBase = {'test':'works!'}
         np.save(serverId, botDictBase)
         botDict = np.load(serverId).item()
 
