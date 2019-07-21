@@ -101,3 +101,4 @@ ENV/
 # Ignore these files
 epic_bot_id.py
 *.npy
+.DS_Store
