@@ -1,5 +1,6 @@
 # Epic Bot
 ### Bot that does commands per server
+Prefix will be the same for all servers. It is defined when the bot runs from the terminal.
 
 Dependencies
 ------
