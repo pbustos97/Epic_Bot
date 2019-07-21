@@ -1,6 +1,6 @@
 botPrefix = ''
-botAddCmd = 'add'
-botRmCmd = 'remove'
+botAddCmd = 'addcmd'
+botRmCmd = 'rmcmd'
 botAddRole = 'addrole'
 botRmRole = 'removerole'
 botBanCmd = 'ban'
