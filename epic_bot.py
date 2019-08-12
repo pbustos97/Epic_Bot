@@ -27,11 +27,11 @@ async def on_message(message):
         np.save(serverId, botDictBase)
         botDict = np.load(serverId).item()
 
-    # Calls changed botPrefix
+    # Calls changed botPrefix (session only)
     global botPrefix
     msg = message.content.split()
     msgPrefix = msg[0][:len(botPrefix)]
-    msg[0] = msg[0][len(botPrefix):] #removes the first 2 characters './'
+    msg[0] = msg[0][len(botPrefix):] #removes the bot prefix from the first msg index
 
     # Does not work if np.load(serverId).item() doesn't exist
     if msg[0] in botDict:
@@ -44,7 +44,7 @@ async def on_message(message):
             newCmd = msg[1]
             botResponse = ''
             for i in range(2,len(msg)):
-                # changed order and deleted character removal
+                # sets bot response to trailing character string after new command
                 botResponse += (msg[i] + ' ')
             print(botResponse)
 
